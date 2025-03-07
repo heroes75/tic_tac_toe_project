@@ -1,6 +1,6 @@
 const Gameboard = (function()  {
     //markTheGameboard = (x, y, playerMarker) => {array[x][y] = playerMarker};
-    const cell = (() => {
+    /*const cell = (() => {
         const arrCell = [];
         const addToarrCell = (x, y, playerMarker) => {
             arrCell.push({x, y, playerMarker})
@@ -12,43 +12,26 @@ const Gameboard = (function()  {
                     }
                 }
             };
-        return {addToarrCell, fillBoard, arrCell}
-})()
+        return {addToarrCell, fillBoard}
+})()*/
     const array = [
-        //["", "", ""],
-        //["", "", ""],
-        //["", "", ""],
+        ["", "", ""],
+        ["", "", ""],
+        ["", "", ""],
     ]
-    for (let i = 0; i < 3; i++) {
-        array[i] = [];
-        for (let j = 0; j < 3; j++) {
-            array[i].push("")
-        }        
-    }
     
     const getBoard = () => array
-    return {array, getBoard, cell}
+    return {array, getBoard}
 })();
 console.log(Gameboard.getBoard())
 const displayControler = (function() {
-    const fillTheBoard = () => {
-        for (let i = 0; i < 3; i++) {
-            for (let j = 0; j < 3; j++) {
-                Gameboard.array[i][j] = Gameboard.cell.fillBoard(i, j) || ""
-            }        
-        }
-        return
-    }
-    const markTheBoard = (x, y, playerMarker) => {
-        array[x][y] = playerMarker
-    };
-    return {markTheBoard, fillTheBoard}
+    //console.log("fun")
+    return {}
 })()
 function createPlayer(name, marker) {
     let score = 0;
     const markTheGameboard = (x, y) => {
-        Gameboard.cell.addToarrCell(x, y, marker);
-        displayControler.fillTheBoard()
+        Gameboard.array[x][y] = marker;
         console.log(Gameboard.array);
         console.log({name, x, y});
         return
@@ -58,7 +41,7 @@ function createPlayer(name, marker) {
 
 const josh = createPlayer("josh", "O");
 const mosh = createPlayer("mosh", "X");
-josh.markTheGameboard(0, 0);
-josh.markTheGameboard(1, 1);
+//josh.markTheGameboard(0, 0);
+//josh.markTheGameboard(1, 1);
 //mosh.markTheGameboard(2, 1);
 
