@@ -1,19 +1,5 @@
 const Gameboard = (function()  {
-    //markTheGameboard = (x, y, playerMarker) => {array[x][y] = playerMarker};
-    /*const cell = (() => {
-        const arrCell = [];
-        const addToarrCell = (x, y, playerMarker) => {
-            arrCell.push({x, y, playerMarker})
-        };
-        const fillBoard = (p, n) => {
-                for (let k = 0; k < arrCell.length; k++) {
-                    if (arrCell[k].x === p && arrCell[k].y === n)  {
-                        return arrCell[k].playerMarker;
-                    }
-                }
-            };
-        return {addToarrCell, fillBoard}
-})()*/
+    const isAlreadyMarked = (x, y) => array[x][y] !== "";
     const array = [
         ["", "", ""],
         ["", "", ""],
@@ -21,24 +7,36 @@ const Gameboard = (function()  {
     ]
     
     const getBoard = () => array
-    return {array, getBoard}
+    return {array, getBoard, isAlreadyMarked}
 })();
 console.log(Gameboard.getBoard())
 const displayControler = (function() {
-    const arrayOfUser = [josh, mosh] = [createPlayer("josh", "O"), createPlayer("mosh", "X")]
-    const playRound = (arrayOfUser) => {
-        console.log(`${arrayOfUser[0].name}'s turn`)
+    const arrayOfUser = [josh, mosh] = [createPlayer("josh", "O"), createPlayer("mosh", "X")];
+    let activeUser = arrayOfUser[0];
+    const changeActiveUser = () => {
+        return activeUser = activeUser === arrayOfUser[0] ? arrayOfUser[1] : arrayOfUser[0];
     }
-    return {}
+    const playRound = () => {
+        console.log(`${activeUser.name}'s turn`);
+    }
+    const getActiveUser = () => activeUser;
+    playRound();
+    return {playRound, changeActiveUser, getActiveUser}
 })()
 function createPlayer(name, marker) {
     let score = 0;
     const markTheGameboard = (x, y) => {
+        if (Gameboard.isAlreadyMarked(x, y)) {
+            console.log("is Already Marked");
+            displayControler.playRound();
+            return
+        }
         Gameboard.array[x][y] = marker;
+        displayControler.changeActiveUser();
+        displayControler.playRound();
         console.log(Gameboard.array);
-        console.log({name, x, y});
     }
-    return {name, markTheGameboard}
+    return {name, marker, markTheGameboard}
 }
 
 //const josh = createPlayer("josh", "O");
