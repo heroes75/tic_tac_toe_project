@@ -25,7 +25,10 @@ const Gameboard = (function()  {
 })();
 console.log(Gameboard.getBoard())
 const displayControler = (function() {
-    //console.log("fun")
+    const arrayOfUser = [josh, mosh] = [createPlayer("josh", "O"), createPlayer("mosh", "X")]
+    const playRound = (arrayOfUser) => {
+        console.log(`${arrayOfUser[0].name}'s turn`)
+    }
     return {}
 })()
 function createPlayer(name, marker) {
@@ -34,13 +37,12 @@ function createPlayer(name, marker) {
         Gameboard.array[x][y] = marker;
         console.log(Gameboard.array);
         console.log({name, x, y});
-        return
     }
     return {name, markTheGameboard}
 }
 
-const josh = createPlayer("josh", "O");
-const mosh = createPlayer("mosh", "X");
+//const josh = createPlayer("josh", "O");
+//const mosh = createPlayer("mosh", "X");
 //josh.markTheGameboard(0, 0);
 //josh.markTheGameboard(1, 1);
 //mosh.markTheGameboard(2, 1);
