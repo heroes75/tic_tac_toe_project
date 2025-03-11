@@ -20,8 +20,22 @@ const displayControler = (function() {
         console.log(`${activeUser.name}'s turn`);
     }
     const getActiveUser = () => activeUser;
+    const isWinner = (marker) => {
+        if(Gameboard.array.some(el => el[0]=== el[1] && el[1] === el[2] && el[0] === marker)){
+            console.log("Winner !!!!!!!!!")
+        }
+        for (let i = 0; i < 3; i++) {
+            const j = 0;
+            console.log(Gameboard.array[j][i] === Gameboard.array[j+1][i] && Gameboard.array[j+1][i] === Gameboard.array[j+2][i] && Gameboard.array[j][i] === marker)
+            if (Gameboard.array[j][i] === Gameboard.array[j+1][i] && Gameboard.array[j+1][i] === Gameboard.array[j+2][i] && Gameboard.array[j][i] === marker) {
+                console.log("Winner !!!!!!!!! vertival") 
+            }
+            
+        }
+    }
     playRound();
-    return {playRound, changeActiveUser, getActiveUser}
+
+    return {playRound, changeActiveUser, getActiveUser, isWinner}
 })()
 function createPlayer(name, marker) {
     let score = 0;
@@ -32,6 +46,7 @@ function createPlayer(name, marker) {
             return
         }
         Gameboard.array[x][y] = marker;
+        displayControler.isWinner(marker)
         displayControler.changeActiveUser();
         displayControler.playRound();
         console.log(Gameboard.array);
