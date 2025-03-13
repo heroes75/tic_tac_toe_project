@@ -1,4 +1,8 @@
 const Gameboard = (function()  {
+    let round = 1;
+    const getRound = () => round;
+    const increaseRound = () => round++;
+    const setRoundToZero = () => round = 1;
     const AllcellMarked = () => array.every(el => el.every(subEl => subEl !== ""))
     const isAlreadyMarked = (x, y) => array[x][y] !== "";
     const array = [
@@ -16,17 +20,21 @@ const Gameboard = (function()  {
         }
     }
     const getBoard = () => array
-    return {array, getBoard, isAlreadyMarked, resetBoard, AllcellMarked}
+    return {array, getBoard, isAlreadyMarked, resetBoard, AllcellMarked, getRound, increaseRound, setRoundToZero}
 })();
 console.log(Gameboard.getBoard())
 const displayControler = (function() {
     const arrayOfUser = [josh, mosh] = [createPlayer("josh", "O"), createPlayer("mosh", "X")];
     let activeUser = arrayOfUser[0];
+    let tie = 0;
+    const increaseTie = () => tie++;
+    const resetTie = () => tie = 0;
     const changeActiveUser = () => {
         return activeUser = activeUser === arrayOfUser[0] ? arrayOfUser[1] : arrayOfUser[0];
     }
     const playRound = () => {
-        console.log(`${josh.name}: ${josh.getScore()} || ${mosh.name}: ${mosh.getScore()}`);
+        console.log(`Round ${Gameboard.getRound()} ${josh.name}: ${josh.getScore()} || ${mosh.name}: ${mosh.getScore()} || tie: ${tie}`);
+        console.log(Gameboard.array);
         console.log(`${activeUser.name}'s turn`);
     }
     const newRound = () => {
@@ -38,6 +46,8 @@ const displayControler = (function() {
     const playNewGame = () => {
         arrayOfUser[0].setScoreToZero();
         arrayOfUser[1].setScoreToZero();
+
+        Gameboard.setRoundToZero();
         newRound();
     }
     const isWinner = (marker) => {
@@ -58,7 +68,7 @@ const displayControler = (function() {
     }
     playRound();
 
-    return {playRound, changeActiveUser, getActiveUser, isWinner, newRound, playNewGame}
+    return {playRound, changeActiveUser, getActiveUser, isWinner, newRound, playNewGame, resetTie, increaseTie}
 })()
 function createPlayer(name, marker) {
     let score = 0;
@@ -74,18 +84,25 @@ function createPlayer(name, marker) {
         if (displayControler.isWinner(marker)) {
             console.log(`the winner of this round is ${name}`);
             score++;
-            if(score === 3)
+            if (score === 3) {
+                console.log(`${name} win this game`);
+                displayControler.resetTie()
+                displayControler.playNewGame();
+                return
+            }
+            Gameboard.increaseRound();
             displayControler.newRound();
             return
         }
         if (Gameboard.AllcellMarked()) {
             console.log("this is a tie");
+            displayControler.increaseTie()
+            Gameboard.increaseRound();
             displayControler.newRound();
             return
         }
         displayControler.changeActiveUser();
         displayControler.playRound();
-        console.log(Gameboard.array);
     }
     return {name, marker, markTheGameboard, getScore, setScoreToZero}
 }
