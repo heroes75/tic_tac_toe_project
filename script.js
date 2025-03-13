@@ -1,4 +1,5 @@
 const Gameboard = (function()  {
+    const AllcellMarked = () => array.every(el => el.every(subEl => subEl !== ""))
     const isAlreadyMarked = (x, y) => array[x][y] !== "";
     const array = [
         ["", "", ""],
@@ -15,7 +16,7 @@ const Gameboard = (function()  {
         }
     }
     const getBoard = () => array
-    return {array, getBoard, isAlreadyMarked, resetBoard}
+    return {array, getBoard, isAlreadyMarked, resetBoard, AllcellMarked}
 })();
 console.log(Gameboard.getBoard())
 const displayControler = (function() {
@@ -34,8 +35,10 @@ const displayControler = (function() {
         playRound();
     }
     const getActiveUser = () => activeUser;
-    const isTie = () => {
-
+    const playNewGame = () => {
+        arrayOfUser[0].setScoreToZero();
+        arrayOfUser[1].setScoreToZero();
+        newRound();
     }
     const isWinner = (marker) => {
         if(Gameboard.array.some(el => el[0]=== el[1] && el[1] === el[2] && el[0] === marker)){
@@ -55,11 +58,12 @@ const displayControler = (function() {
     }
     playRound();
 
-    return {playRound, changeActiveUser, getActiveUser, isWinner, newRound}
+    return {playRound, changeActiveUser, getActiveUser, isWinner, newRound, playNewGame}
 })()
 function createPlayer(name, marker) {
     let score = 0;
     const getScore = () => score;
+    const setScoreToZero = () => score = 0;
     const markTheGameboard = (x, y) => {
         if (Gameboard.isAlreadyMarked(x, y)) {
             console.log("is Already Marked");
@@ -70,6 +74,12 @@ function createPlayer(name, marker) {
         if (displayControler.isWinner(marker)) {
             console.log(`the winner of this round is ${name}`);
             score++;
+            if(score === 3)
+            displayControler.newRound();
+            return
+        }
+        if (Gameboard.AllcellMarked()) {
+            console.log("this is a tie");
             displayControler.newRound();
             return
         }
@@ -77,7 +87,7 @@ function createPlayer(name, marker) {
         displayControler.playRound();
         console.log(Gameboard.array);
     }
-    return {name, marker, markTheGameboard, getScore}
+    return {name, marker, markTheGameboard, getScore, setScoreToZero}
 }
 
 //const josh = createPlayer("josh", "O");
