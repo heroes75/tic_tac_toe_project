@@ -1,0 +1,18 @@
+* {
+    box-sizing: border-box;
+    border: 1px solid red;
+}
+:root {
+    --length-case: 100px;
+}
+html, body {
+    height: 100%;
+}
+.grid-case{
+    height: var(--length-case);
+    width: var(--length-case);
+}
+.array-container {
+    display: grid;
+    grid-template-columns: repeat(3, var(--length-case))
+}

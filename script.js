@@ -1,3 +1,4 @@
+const arrayContainer = document.querySelector(".array-container");
 const Gameboard = (function()  {
     let round = 1;
     const getRound = () => round;
@@ -14,9 +15,7 @@ const Gameboard = (function()  {
         for (let i = 0; i < array.length; i++) {
             for (let j = 0; j < array.length; j++) {
                 array[i][j] = "";
-                
             }
-            
         }
     }
     const getBoard = () => array
@@ -106,6 +105,28 @@ function createPlayer(name, marker) {
     }
     return {name, marker, markTheGameboard, getScore, setScoreToZero}
 }
+
+const DOMhandler = (() => {
+    
+    const displayArray = ((arr) => {
+        arrayContainer.textContent = ""
+        arr.forEach((el, i) => el.forEach((subEl, j) => {
+            const div = document.createElement("div");
+            div.classList.add("grid-case");
+            div.setAttribute("id", `x:${i}-y:${j}`);
+            div.textContent = subEl;
+            console.log(subEl);
+            arrayContainer.appendChild(div);
+        }));
+    })
+    displayArray(Gameboard.array);
+    const markTheScreenBoard = (() => {
+        arrayContainer.addEventListener("click", (e) => {
+            displayControler.getActiveUser().markTheGameboard(e.target.id[2], e.target.id[6]);
+            displayArray(Gameboard.array)
+        })
+    })()
+})()
 
 //const josh = createPlayer("josh", "O");
 //const mosh = createPlayer("mosh", "X");
