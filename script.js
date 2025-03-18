@@ -1,4 +1,3 @@
-const arrayContainer = document.querySelector(".array-container");
 const Gameboard = (function()  {
     let round = 1;
     const getRound = () => round;
@@ -21,30 +20,82 @@ const Gameboard = (function()  {
     const getBoard = () => array
     return {array, getBoard, isAlreadyMarked, resetBoard, AllcellMarked, getRound, increaseRound, setRoundToZero}
 })();
-console.log(Gameboard.getBoard())
+
+const DOMhandler = (() => {
+    const arrayContainer = document.querySelector(".array-container");
+    const registrationContainer = document.querySelector(".registration-container");
+    const GameboardContainer = document.querySelector(".Gameboard-container");
+    const playerOneName = document.querySelector("#player-one-name");
+    const playerTwoName = document.querySelector("#player-two-name");
+    const playersNames = document.querySelector("#players-names");
+    const players = [];
+    let arrayOfUser =[];
+    var activeUser = {active: ""};
+    const setActiveUser = () => {
+        return  activeUser = arrayOfUser[0]
+    }
+    let player1;
+    let player2;
+    playersNames.addEventListener("click", e => {
+        e.preventDefault();
+        players.push(playerOneName.value);
+        players.push(playerTwoName.value);
+        //arrayOfUser = [player1, player2] = [createPlayer(playerOneName.value, "O"), createPlayer(playerTwoName.value, "X")];
+        arrayOfUser.push(player1 = createPlayer(playerOneName.value, "O"));
+        arrayOfUser.push(player2 = createPlayer(playerTwoName.value, "X"));
+        activeUser.active = arrayOfUser[0]
+        console.log("activeusers on event", activeUser)
+        registrationContainer.toggleAttribute("hidden");
+        GameboardContainer.toggleAttribute("hidden");
+    })
+    console.log("out of event listener",arrayOfUser)
+    //activeUser = arrayOfUser[0];
+    console.log(" activeusers out of event listener",activeUser)
+    const displayArray = ((arr) => {
+        arrayContainer.textContent = ""
+        arr.forEach((el, i) => el.forEach((subEl, j) => {
+            const div = document.createElement("div");
+            div.classList.add("grid-case");
+            div.setAttribute("id", `x:${i}-y:${j}`);
+            div.textContent = subEl;
+            arrayContainer.appendChild(div);
+        }));
+    })
+    displayArray(Gameboard.array);
+    const markTheScreenBoard = (() => {
+        arrayContainer.addEventListener("click", (e) => {
+            displayControler.getActiveUser().markTheGameboard(e.target.id[2], e.target.id[6]);
+            displayArray(Gameboard.array)
+        })
+    })()
+    return {players, arrayOfUser, activeUser}
+})()
+
 const displayControler = (function() {
-    const arrayOfUser = [josh, mosh] = [createPlayer("josh", "O"), createPlayer("mosh", "X")];
-    let activeUser = arrayOfUser[0];
+    //if (!DOMhandler.players) return
+    //const arrayOfUser = [player1, player2] = [createPlayer(DOMhandler.players[0] || "josh", "O"), createPlayer(DOMhandler.players[1] || "mosh", "X")];
+    console.log(DOMhandler.arrayOfUser);
+    //let activeUser = DOMhandler.arrayOfUser[0];
     let tie = 0;
     const increaseTie = () => tie++;
     const resetTie = () => tie = 0;
     const changeActiveUser = () => {
-        return activeUser = activeUser === arrayOfUser[0] ? arrayOfUser[1] : arrayOfUser[0];
+        return DOMhandler.activeUser.active = DOMhandler.activeUser.active === DOMhandler.arrayOfUser[0] || DOMhandler.activeUser.active === undefined ? DOMhandler.arrayOfUser[1] : DOMhandler.arrayOfUser[0];
     }
     const playRound = () => {
-        console.log(`Round ${Gameboard.getRound()} ${josh.name}: ${josh.getScore()} || ${mosh.name}: ${mosh.getScore()} || tie: ${tie}`);
+        console.log(`Round ${Gameboard.getRound()} ${DOMhandler.arrayOfUser[0].name}: ${DOMhandler.arrayOfUser[0].getScore()} || ${DOMhandler.arrayOfUser[1].name}: ${DOMhandler.arrayOfUser[1].getScore()} || tie: ${tie}`);
         console.log(Gameboard.array);
-        console.log(`${activeUser.name}'s turn`);
+        console.log(`${DOMhandler.activeUser.active.name}'s turn`);
     }
     const newRound = () => {
         Gameboard.resetBoard();
-        activeUser = arrayOfUser[0];
+        DOMhandler.activeUser.active = DOMhandler.arrayOfUser[0];
         playRound();
     }
-    const getActiveUser = () => activeUser;
+    const getActiveUser = () => DOMhandler.activeUser.active;
     const playNewGame = () => {
-        arrayOfUser[0].setScoreToZero();
-        arrayOfUser[1].setScoreToZero();
+        DOMhandler.arrayOfUser[0].setScoreToZero();
+        DOMhandler.arrayOfUser[1].setScoreToZero();
 
         Gameboard.setRoundToZero();
         newRound();
@@ -65,7 +116,7 @@ const displayControler = (function() {
             return true;
         }
     }
-    playRound();
+    //playRound();
 
     return {playRound, changeActiveUser, getActiveUser, isWinner, newRound, playNewGame, resetTie, increaseTie}
 })()
@@ -106,28 +157,7 @@ function createPlayer(name, marker) {
     return {name, marker, markTheGameboard, getScore, setScoreToZero}
 }
 
-const DOMhandler = (() => {
-    const playerOneName = document.querySelector("#player-one-name");
-    const playerTwoName = document.querySelector("#player-two-name");
-    const playersNames = document.querySelector("#players-names");
-    const displayArray = ((arr) => {
-        arrayContainer.textContent = ""
-        arr.forEach((el, i) => el.forEach((subEl, j) => {
-            const div = document.createElement("div");
-            div.classList.add("grid-case");
-            div.setAttribute("id", `x:${i}-y:${j}`);
-            div.textContent = subEl;
-            arrayContainer.appendChild(div);
-        }));
-    })
-    displayArray(Gameboard.array);
-    const markTheScreenBoard = (() => {
-        arrayContainer.addEventListener("click", (e) => {
-            displayControler.getActiveUser().markTheGameboard(e.target.id[2], e.target.id[6]);
-            displayArray(Gameboard.array)
-        })
-    })()
-})()
+
 
 //const josh = createPlayer("josh", "O");
 //const mosh = createPlayer("mosh", "X");
