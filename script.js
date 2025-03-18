@@ -107,7 +107,9 @@ function createPlayer(name, marker) {
 }
 
 const DOMhandler = (() => {
-    
+    const playerOneName = document.querySelector("#player-one-name");
+    const playerTwoName = document.querySelector("#player-two-name");
+    const playersNames = document.querySelector("#players-names");
     const displayArray = ((arr) => {
         arrayContainer.textContent = ""
         arr.forEach((el, i) => el.forEach((subEl, j) => {
@@ -115,7 +117,6 @@ const DOMhandler = (() => {
             div.classList.add("grid-case");
             div.setAttribute("id", `x:${i}-y:${j}`);
             div.textContent = subEl;
-            console.log(subEl);
             arrayContainer.appendChild(div);
         }));
     })
