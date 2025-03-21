@@ -46,6 +46,9 @@ const DOMhandler = (() => {
         GameboardContainer.toggleAttribute("hidden");
         writeToDOM(".player-one-name-display", arrayOfUser[0].name || "");
         writeToDOM(".player-two-name-display", arrayOfUser[1].name || "");
+        writeToDOM(".player-one-score", arrayOfUser[0].getScore() || 0);
+        writeToDOM(".player-two-score", arrayOfUser[1].getScore() || 0);
+        writeToDOM("#state-game", `${activeUser.active.name}' turn`);
     })
     const writeToDOM = (selector, message = 0) => {
         document.querySelector(selector).textContent = message;
@@ -70,10 +73,10 @@ const DOMhandler = (() => {
         arrayContainer.addEventListener("click", (e) => {
             displayControler.getActiveUser().markTheGameboard(e.target.id[2], e.target.id[6]);
             
-            displayArray(Gameboard.array)
+            //displayArray(Gameboard.array)
         })
     })()
-    return {arrayOfUser, activeUser, writeToDOM}
+    return {arrayOfUser, activeUser, writeToDOM, displayArray}
 })()
 
 const displayControler = (function() {
@@ -93,6 +96,10 @@ const displayControler = (function() {
         //console.log(`${DOMhandler.activeUser.active.name}'s turn`);
         DOMhandler.writeToDOM(".player-one-name-display", DOMhandler.arrayOfUser[0].name || "");
         DOMhandler.writeToDOM(".player-two-name-display", DOMhandler.arrayOfUser[1].name || "");
+        DOMhandler.writeToDOM(".player-one-score", DOMhandler.arrayOfUser[0].getScore() || 0);
+        DOMhandler.writeToDOM(".player-two-score", DOMhandler.arrayOfUser[1].getScore() || 0);
+        DOMhandler.writeToDOM("#state-game", `${DOMhandler.activeUser.active.name}' turn`);
+        DOMhandler.displayArray(Gameboard.array)
         //return {writeToDOM}
     }
     const newRound = () => {
@@ -140,22 +147,32 @@ function createPlayer(name = "josh", marker) {
         Gameboard.array[x][y] = marker;
         if (displayControler.isWinner(marker)) {
             console.log(`the winner of this round is ${name}`);
+            DOMhandler.writeToDOM("#state-game", `the winner of this round is ${name}`);          
             score++;
             if (score === 3) {
                 console.log(`${name} win this game`);
-                displayControler.resetTie()
+                displayControler.resetTie();
                 displayControler.playNewGame();
                 return
             }
+            DOMhandler.displayArray(Gameboard.array)
             Gameboard.increaseRound();
-            displayControler.newRound();
+            setTimeout(() => {
+                //Gameboard.resetBoard();
+                displayControler.newRound();
+            }, 1500);
+            //displayControler.newRound();
             return
         }
         if (Gameboard.AllcellMarked()) {
-            console.log("this is a tie");
+            DOMhandler.writeToDOM("#state-game", `this is a tie`);
             displayControler.increaseTie()
             Gameboard.increaseRound();
-            displayControler.newRound();
+            setTimeout(() => {
+                //Gameboard.resetBoard();
+                displayControler.newRound();
+            }, 1500);
+            //displayControler.newRound();
             return
         }
         displayControler.changeActiveUser();
