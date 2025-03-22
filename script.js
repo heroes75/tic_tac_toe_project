@@ -39,9 +39,8 @@ const DOMhandler = (() => {
         //arrayOfUser = [player1, player2] = [createPlayer(playerOneName.value, "O"), createPlayer(playerTwoName.value, "X")];
         arrayOfUser.push(player1 = createPlayer(playerOneName.value, "O"));
         arrayOfUser.push(player2 = createPlayer(playerTwoName.value, "X"));
-        activeUser.active = arrayOfUser[0]
-        
-        console.log("activeusers on event", activeUser)
+        activeUser.active = arrayOfUser[0];
+        console.log("activeusers on event", activeUser);
         registrationContainer.toggleAttribute("hidden");
         GameboardContainer.toggleAttribute("hidden");
         writeToDOM(".player-one-name-display", arrayOfUser[0].name || "");
@@ -55,7 +54,7 @@ const DOMhandler = (() => {
     }
     console.log("out of event listener",arrayOfUser)
     //activeUser = arrayOfUser[0];
-    console.log(" activeusers out of event listener",activeUser)
+    console.log("activeusers out of event listener",activeUser)
     const displayArray = ((arr) => {
         arrayContainer.textContent = ""
         arr.forEach((el, i) => el.forEach((subEl, j) => {
@@ -68,6 +67,28 @@ const DOMhandler = (() => {
        
     })
     
+    const restart = () => {
+        document.getElementById("restart").addEventListener("click", () => {
+            Gameboard.resetBoard();
+            displayControler.playNewGame();
+            document.querySelector(".Gameboard-container").removeAttribute("inert");
+            document.getElementById("end-game").setAttribute("hidden", "");
+        });
+        
+    }
+    const replay = () => {
+        document.getElementById("replay").addEventListener("click", () => {
+            Gameboard.resetBoard();
+            displayControler.playNewGame();
+            arrayOfUser.pop();
+            arrayOfUser.pop();
+            registrationContainer.toggleAttribute("hidden");
+            GameboardContainer.toggleAttribute("hidden");
+            document.getElementById("end-game").setAttribute("hidden", "");
+            document.querySelector(".Gameboard-container").removeAttribute("inert");
+        })
+    }
+
     displayArray(Gameboard.array);
     const markTheScreenBoard = (() => {
         arrayContainer.addEventListener("click", (e) => {
@@ -76,7 +97,7 @@ const DOMhandler = (() => {
             //displayArray(Gameboard.array)
         })
     })()
-    return {arrayOfUser, activeUser, writeToDOM, displayArray}
+    return {arrayOfUser, activeUser, writeToDOM, displayArray, restart, replay}
 })()
 
 const displayControler = (function() {
@@ -91,15 +112,12 @@ const displayControler = (function() {
         return DOMhandler.activeUser.active = DOMhandler.activeUser.active === DOMhandler.arrayOfUser[0] || DOMhandler.activeUser.active === undefined ? DOMhandler.arrayOfUser[1] : DOMhandler.arrayOfUser[0];
     }
     const playRound = () => {
-        //console.log(`Round ${Gameboard.getRound()} ${DOMhandler.arrayOfUser[0].name}: ${DOMhandler.arrayOfUser[0].getScore()} || ${DOMhandler.arrayOfUser[1].name}: ${DOMhandler.arrayOfUser[1].getScore()} || tie: ${tie}`);
-        //console.log(Gameboard.array);
-        //console.log(`${DOMhandler.activeUser.active.name}'s turn`);
         DOMhandler.writeToDOM(".player-one-name-display", DOMhandler.arrayOfUser[0].name || "");
         DOMhandler.writeToDOM(".player-two-name-display", DOMhandler.arrayOfUser[1].name || "");
         DOMhandler.writeToDOM(".player-one-score", DOMhandler.arrayOfUser[0].getScore() || 0);
         DOMhandler.writeToDOM(".player-two-score", DOMhandler.arrayOfUser[1].getScore() || 0);
         DOMhandler.writeToDOM("#state-game", `${DOMhandler.activeUser.active.name}' turn`);
-        DOMhandler.displayArray(Gameboard.array)
+        DOMhandler.displayArray(Gameboard.array);
         //return {writeToDOM}
     }
     const newRound = () => {
@@ -109,6 +127,7 @@ const displayControler = (function() {
     }
     const getActiveUser = () => DOMhandler.activeUser.active;
     const playNewGame = () => {
+        resetTie()
         DOMhandler.arrayOfUser[0].setScoreToZero();
         DOMhandler.arrayOfUser[1].setScoreToZero();
         Gameboard.setRoundToZero();
@@ -150,9 +169,12 @@ function createPlayer(name = "josh", marker) {
             DOMhandler.writeToDOM("#state-game", `the winner of this round is ${name}`);          
             score++;
             if (score === 3) {
-                console.log(`${name} win this game`);
-                displayControler.resetTie();
-                displayControler.playNewGame();
+                displayControler.playRound();
+                DOMhandler.writeToDOM("#winner", `${name} win the game`);
+                document.getElementById("end-game").removeAttribute("hidden");
+                document.querySelector(".Gameboard-container").setAttribute("inert", "");
+                DOMhandler.restart();
+                DOMhandler.replay();
                 return
             }
             DOMhandler.displayArray(Gameboard.array)
