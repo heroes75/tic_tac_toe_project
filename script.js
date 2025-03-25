@@ -44,7 +44,7 @@ const DOMhandler = (() => {
         writeToDOM(".player-one-name-display", arrayOfUser[0].name || "");
         writeToDOM(".player-two-name-display", arrayOfUser[1].name || "");
         writeToDOM("#round-container", `ROUND ${Gameboard.getRound()}`);
-        writeToDOM("#tie-score", `TIE: ${displayControler.getTie()}`);
+        writeToDOM("#tie-score", `TIE: ${displayController.getTie()}`);
         writeToDOM(".player-one-score", arrayOfUser[0].getScore() || 0);
         writeToDOM(".player-two-score", arrayOfUser[1].getScore() || 0);
         writeToDOM("#state-game", `${activeUser.active.name}' turn`);
@@ -67,7 +67,7 @@ const DOMhandler = (() => {
     const restart = () => {
         document.getElementById("restart").addEventListener("click", () => {
             Gameboard.resetBoard();
-            displayControler.playNewGame();
+            displayController.playNewGame();
             document.querySelector(".Gameboard-container").removeAttribute("inert");
             document.getElementById("end-game").setAttribute("hidden", "");
         });
@@ -76,7 +76,7 @@ const DOMhandler = (() => {
     const replay = () => {
         document.getElementById("replay").addEventListener("click", () => {
             Gameboard.resetBoard();
-            displayControler.playNewGame();
+            displayController.playNewGame();
             arrayOfUser.pop();
             arrayOfUser.pop();
             registrationContainer.toggleAttribute("hidden");
@@ -89,13 +89,13 @@ const DOMhandler = (() => {
     displayArray(Gameboard.array);
     const markTheScreenBoard = (() => {
         arrayContainer.addEventListener("click", (e) => {
-            displayControler.getActiveUser().markTheGameboard(e.target.id[2], e.target.id[6]);
+            displayController.getActiveUser().markTheGameboard(e.target.id[2], e.target.id[6]);
         })
     })()
     return {arrayOfUser, activeUser, writeToDOM, displayArray, restart, replay}
 })()
 
-const displayControler = (function() {
+const displayController = (function() {
     console.log(DOMhandler.arrayOfUser);
     let tie = 0;
     const getTie = () => tie;
@@ -152,15 +152,15 @@ function createPlayer(name = "josh", marker) {
     const markTheGameboard = (x, y) => {
         if (Gameboard.isAlreadyMarked(x, y)) {
             console.log("is Already Marked");
-            displayControler.playRound();
+            displayController.playRound();
             return
         }
         Gameboard.array[x][y] = marker;
-        if (displayControler.isWinner(marker)) {
+        if (displayController.isWinner(marker)) {
             DOMhandler.writeToDOM("#state-game", `the winner of this round is ${name}`);          
             score++;
             if (score === 3) {
-                displayControler.playRound();
+                displayController.playRound();
                 DOMhandler.writeToDOM("#winner", `${name} win the game`);
                 document.getElementById("end-game").removeAttribute("hidden");
                 document.querySelector(".Gameboard-container").setAttribute("inert", "");
@@ -171,22 +171,22 @@ function createPlayer(name = "josh", marker) {
             DOMhandler.displayArray(Gameboard.array)
             Gameboard.increaseRound();
             setTimeout(() => {
-                displayControler.newRound();
+                displayController.newRound();
             }, 1500);
             return
         }
         if (Gameboard.AllcellMarked()) {
             DOMhandler.writeToDOM("#state-game", `this is a tie`);
-            displayControler.increaseTie()
+            displayController.increaseTie()
             Gameboard.increaseRound();
             DOMhandler.displayArray(Gameboard.array);
             setTimeout(() => {
-                displayControler.newRound();
+                displayController.newRound();
             }, 1500);
             return
         }
-        displayControler.changeActiveUser();
-        displayControler.playRound();
+        displayController.changeActiveUser();
+        displayController.playRound();
     }
     return {name, marker, markTheGameboard, getScore, setScoreToZero}
 }
