@@ -45,6 +45,8 @@ const DOMhandler = (() => {
         GameboardContainer.toggleAttribute("hidden");
         writeToDOM(".player-one-name-display", arrayOfUser[0].name || "");
         writeToDOM(".player-two-name-display", arrayOfUser[1].name || "");
+        writeToDOM("#round-container", `ROUND ${Gameboard.getRound()}`);
+        writeToDOM("#tie-score", `TIE: ${displayControler.getTie()}`);
         writeToDOM(".player-one-score", arrayOfUser[0].getScore() || 0);
         writeToDOM(".player-two-score", arrayOfUser[1].getScore() || 0);
         writeToDOM("#state-game", `${activeUser.active.name}' turn`);
@@ -93,8 +95,6 @@ const DOMhandler = (() => {
     const markTheScreenBoard = (() => {
         arrayContainer.addEventListener("click", (e) => {
             displayControler.getActiveUser().markTheGameboard(e.target.id[2], e.target.id[6]);
-            
-            //displayArray(Gameboard.array)
         })
     })()
     return {arrayOfUser, activeUser, writeToDOM, displayArray, restart, replay}
@@ -106,6 +106,7 @@ const displayControler = (function() {
     console.log(DOMhandler.arrayOfUser);
     //let activeUser = DOMhandler.arrayOfUser[0];
     let tie = 0;
+    const getTie = () => tie;
     const increaseTie = () => tie++;
     const resetTie = () => tie = 0;
     const changeActiveUser = () => {
@@ -114,9 +115,11 @@ const displayControler = (function() {
     const playRound = () => {
         DOMhandler.writeToDOM(".player-one-name-display", DOMhandler.arrayOfUser[0].name || "");
         DOMhandler.writeToDOM(".player-two-name-display", DOMhandler.arrayOfUser[1].name || "");
+        DOMhandler.writeToDOM("#round-container", `ROUND ${Gameboard.getRound()}`);
+        DOMhandler.writeToDOM("#tie-score", `TIE: ${tie}`);
         DOMhandler.writeToDOM(".player-one-score", DOMhandler.arrayOfUser[0].getScore() || 0);
         DOMhandler.writeToDOM(".player-two-score", DOMhandler.arrayOfUser[1].getScore() || 0);
-        DOMhandler.writeToDOM("#state-game", `${DOMhandler.activeUser.active.name}' turn`);
+        DOMhandler.writeToDOM("#state-game", `${DOMhandler.activeUser.active.name}'s turn`);
         DOMhandler.displayArray(Gameboard.array);
         //return {writeToDOM}
     }
@@ -151,7 +154,7 @@ const displayControler = (function() {
     }
     //playRound();
 
-    return {playRound, changeActiveUser, getActiveUser, isWinner, newRound, playNewGame, resetTie, increaseTie}
+    return {playRound, changeActiveUser, getActiveUser, isWinner, newRound, playNewGame, resetTie, increaseTie, getTie}
 })()
 function createPlayer(name = "josh", marker) {
     let score = 0;
@@ -190,6 +193,7 @@ function createPlayer(name = "josh", marker) {
             DOMhandler.writeToDOM("#state-game", `this is a tie`);
             displayControler.increaseTie()
             Gameboard.increaseRound();
+            DOMhandler.displayArray(Gameboard.array);
             setTimeout(() => {
                 //Gameboard.resetBoard();
                 displayControler.newRound();

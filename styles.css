@@ -1,18 +1,157 @@
 * {
     box-sizing: border-box;
-    border: 1px solid red;
-}
+    /* border: 1px solid red;
+ */}
+
 :root {
     --length-case: 100px;
 }
+
 html, body {
     height: 100%;
 }
+
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
 .grid-case{
     height: var(--length-case);
     width: var(--length-case);
+    border: 2px solid blueviolet;
 }
+
 .array-container {
     display: grid;
-    grid-template-columns: repeat(3, var(--length-case))
+    grid-template-columns: repeat(3, var(--length-case));
+    align-self: center;
+    justify-self: end;
+}
+.registration-container {
+    width: 100%;
+    /* height: 100px;
+ */}
+
+.registration-form {
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+    height: 100px;
+    flex-direction: column;
+}
+
+.label-name {
+    gap: 10px;
+    display: flex;
+    flex-direction: column;
+    align-self: start;
+    justify-self: center;
+}
+
+.enter-name {
+    font-size: 20px;
+    font-weight: 500;
+    
+ }
+
+#player-one-name, #player-two-name  {
+    height: 1 rem;
+    font-size: 20px;
+    align-self: center;
+    
+}
+.name-enter-registration {
+    height: 70%;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    gap: 35px;
+}
+#players-names {
+    align-self: center;
+    justify-self: center;
+    padding: 7px 13px;
+    border-radius: 15px;
+}
+
+.grid-case {
+    font-size: calc(var(--length-case) - (var(--length-case) * 10) / 100);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.Gameboard-container {
+    width: 100%;
+    height:70% ;
+}
+
+#sub-Gameboard-container {
+    width: 100%;
+    height:100%;
+    display: flex;
+    flex-direction: column;
+}
+.player-container {
+    width: 100%;
+    height: 10%;
+    justify-self: start;
+    align-self: start;
+    display: flex;
+    justify-content: space-around;
+    align-items: start;
+    gap: 20vw;
+}
+#state-game {
+    align-self: center;
+    justify-self: center;
+    flex-basis: 100px;
+    display: flex;
+    align-items: center;
+    font-size: 36px;
+}
+.player-one-container, .player-two-container {
+    display: flex;
+    gap: 7px;
+}
+
+.player-one-name-display, .player-two-name-display {
+    font-size: 1.3rem;
+    border-top: 2px solid green;
+    border-left: 2px solid green;
+    border-bottom: 2px solid green;
+}
+.player-one-score, .player-two-score {
+    font-size: 1.3rem;
+    border-top: 2px solid green;
+    border-right: 2px solid green;
+    border-bottom: 2px solid green;
+}
+
+#end-game {
+    position: absolute;
+    background-color: orange;
+}
+
+#end-game p {
+    font-size: 20px;
+}
+#restart, #replay {
+    align-self: center;
+    padding: 5px 17px;
+}
+#sub-end-game {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+#round-container {
+    position: absolute;
+    top: 5%;
+    right: 40%;
+    font-size: 3rem;
+    font-weight: 800;
 }

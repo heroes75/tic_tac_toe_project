@@ -9,22 +9,29 @@
 <body>
     <div class="registration-container">
         <div class="registration-form">
-            <label for="player-one-name">enter the name of player one:<input name="player-one-name" id="player-one-name" value="player1" type="text"></label>
-            <label for="player-two-name">enter the name of player two:<input name="player-two-name" id="player-two-name" value="player2" type="text"></label>
+            <div class="name-enter-registration">
+                <label class="label-name" for="player-one-name"><div class="enter-name">enter the name of player one:</div><input name="player-one-name" id="player-one-name" value="player1" type="text"></label>
+                <label class="label-name" for="player-two-name"><div class="enter-name">enter the name of player two:</div><input name="player-two-name" id="player-two-name" value="player2" type="text"></label>
+            </div>
             <button id="players-names">Enter</button>
         </div>
     </div>
     <div class="Gameboard-container" hidden>
-        <div class="player-container" >
-            <div class="player-one-container"><span class="player-one-name-display"></span><span class="player-one-score"></span></div>
-            <div class="player-two-container"><span class="player-two-name-display"></span><span class="player-two-score"></span></div>
-        </div>
-        <div id="state-game"></div>
-        <div class="array-container">
-
+        <div id="round-container"></div>
+        <div id="sub-Gameboard-container">
+            <div class="player-container" >
+                <div class="player-one-container"><span class="player-one-name-display"></span><span class="player-one-score"></span></div>
+                <div id="tie-score"></div>
+                <div class="player-two-container"><span class="player-two-name-display"></span><span class="player-two-score"></span></div>
+            </div>
+            <div id="state-game"></div>
+            <div class="array-container">
+            </div>
         </div>
     </div>
-    <div id="end-game" hidden><p id="winner"></p> what you choose ?<button id="restart">restart</button><button id="replay">replay?</button></div>
+    <div id="end-game" hidden><div id="sub-end-game">
+        <p id="winner"></p> what you choose ?<button id="restart">restart</button><button id="replay">replay?</button>
+    </div></div>
     <script src="script.js"></script>
 </body>
 </html>
