@@ -36,11 +36,9 @@ const DOMhandler = (() => {
     let player2;
     playersNames.addEventListener("click", e => {
         e.preventDefault();
-        //arrayOfUser = [player1, player2] = [createPlayer(playerOneName.value, "O"), createPlayer(playerTwoName.value, "X")];
         arrayOfUser.push(player1 = createPlayer(playerOneName.value, "O"));
         arrayOfUser.push(player2 = createPlayer(playerTwoName.value, "X"));
         activeUser.active = arrayOfUser[0];
-        console.log("activeusers on event", activeUser);
         registrationContainer.toggleAttribute("hidden");
         GameboardContainer.toggleAttribute("hidden");
         writeToDOM(".player-one-name-display", arrayOfUser[0].name || "");
@@ -54,9 +52,6 @@ const DOMhandler = (() => {
     const writeToDOM = (selector, message = 0) => {
         document.querySelector(selector).textContent = message;
     }
-    console.log("out of event listener",arrayOfUser)
-    //activeUser = arrayOfUser[0];
-    console.log("activeusers out of event listener",activeUser)
     const displayArray = ((arr) => {
         arrayContainer.textContent = ""
         arr.forEach((el, i) => el.forEach((subEl, j) => {
@@ -101,10 +96,7 @@ const DOMhandler = (() => {
 })()
 
 const displayControler = (function() {
-    //if (!DOMhandler.players) return
-    //const arrayOfUser = [player1, player2] = [createPlayer(DOMhandler.players[0] || "josh", "O"), createPlayer(DOMhandler.players[1] || "mosh", "X")];
     console.log(DOMhandler.arrayOfUser);
-    //let activeUser = DOMhandler.arrayOfUser[0];
     let tie = 0;
     const getTie = () => tie;
     const increaseTie = () => tie++;
@@ -121,7 +113,6 @@ const displayControler = (function() {
         DOMhandler.writeToDOM(".player-two-score", DOMhandler.arrayOfUser[1].getScore() || 0);
         DOMhandler.writeToDOM("#state-game", `${DOMhandler.activeUser.active.name}'s turn`);
         DOMhandler.displayArray(Gameboard.array);
-        //return {writeToDOM}
     }
     const newRound = () => {
         Gameboard.resetBoard();
@@ -142,7 +133,6 @@ const displayControler = (function() {
         }
         for (let i = 0; i < 3; i++) {
             const j = 0;
-            console.log(Gameboard.array[j][i] === Gameboard.array[j+1][i] && Gameboard.array[j+1][i] === Gameboard.array[j+2][i] && Gameboard.array[j][i] === marker)
             if (Gameboard.array[j][i] === Gameboard.array[j+1][i] && Gameboard.array[j+1][i] === Gameboard.array[j+2][i] && Gameboard.array[j][i] === marker) {
                 return true; 
             }
@@ -152,7 +142,6 @@ const displayControler = (function() {
             return true;
         }
     }
-    //playRound();
 
     return {playRound, changeActiveUser, getActiveUser, isWinner, newRound, playNewGame, resetTie, increaseTie, getTie}
 })()
@@ -168,7 +157,6 @@ function createPlayer(name = "josh", marker) {
         }
         Gameboard.array[x][y] = marker;
         if (displayControler.isWinner(marker)) {
-            console.log(`the winner of this round is ${name}`);
             DOMhandler.writeToDOM("#state-game", `the winner of this round is ${name}`);          
             score++;
             if (score === 3) {
@@ -183,10 +171,8 @@ function createPlayer(name = "josh", marker) {
             DOMhandler.displayArray(Gameboard.array)
             Gameboard.increaseRound();
             setTimeout(() => {
-                //Gameboard.resetBoard();
                 displayControler.newRound();
             }, 1500);
-            //displayControler.newRound();
             return
         }
         if (Gameboard.AllcellMarked()) {
@@ -195,10 +181,8 @@ function createPlayer(name = "josh", marker) {
             Gameboard.increaseRound();
             DOMhandler.displayArray(Gameboard.array);
             setTimeout(() => {
-                //Gameboard.resetBoard();
                 displayControler.newRound();
             }, 1500);
-            //displayControler.newRound();
             return
         }
         displayControler.changeActiveUser();
@@ -206,12 +190,3 @@ function createPlayer(name = "josh", marker) {
     }
     return {name, marker, markTheGameboard, getScore, setScoreToZero}
 }
-
-
-
-//const josh = createPlayer("josh", "O");
-//const mosh = createPlayer("mosh", "X");
-//josh.markTheGameboard(0, 0);
-//josh.markTheGameboard(1, 1);
-//mosh.markTheGameboard(2, 1);
-
